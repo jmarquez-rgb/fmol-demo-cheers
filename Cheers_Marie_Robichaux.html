@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheers — Marie Robichaux | FMOL Health</title>
+<style>
+  /* ============ DESIGN TOKENS ============ */
+  /* Epic-Cheers inspired palette: deep teal + neutral grays + accent semantics */
+  :root {
+    --epic-teal-900: #0a3a4a;
+    --epic-teal-800: #0d4858;
+    --epic-teal-700: #115a6e;
+    --epic-teal-600: #167290;
+    --epic-teal-500: #1d8eb5;
+    --epic-teal-100: #d8edf4;
+    --epic-teal-50: #ecf6fa;
+
+    --gray-900: #1a202c;
+    --gray-800: #2d3748;
+    --gray-700: #4a5568;
+    --gray-600: #718096;
+    --gray-500: #a0aec0;
+    --gray-400: #cbd5e0;
+    --gray-300: #e2e8f0;
+    --gray-200: #edf2f7;
+    --gray-100: #f7fafc;
+    --gray-50: #fafbfc;
+
+    --accent-success: #2f855a;
+    --accent-success-bg: #c6f6d5;
+    --accent-warning: #c05621;
+    --accent-warning-bg: #fed7aa;
+    --accent-danger: #c53030;
+    --accent-danger-bg: #fed7d7;
+    --accent-info: #2b6cb0;
+    --accent-info-bg: #bee3f8;
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 4px 6px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.03);
+
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-display: 'IBM Plex Sans', 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--gray-800);
+    background: var(--gray-100);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ============ TOP NAV ============ */
+  .topnav {
+    background: var(--epic-teal-900);
+    color: white;
+    padding: 0 16px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--epic-teal-800);
+  }
+  .topnav-left { display: flex; align-items: center; gap: 24px; }
+  .logo {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -0.5px;
+    color: white;
+  }
+  .logo-mark {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background: white;
+    color: var(--epic-teal-900);
+    border-radius: 4px;
+    text-align: center;
+    line-height: 24px;
+    font-weight: 800;
+    margin-right: 8px;
+    vertical-align: middle;
+    font-size: 13px;
+  }
+  .topnav-tabs { display: flex; gap: 4px; }
+  .topnav-tab {
+    padding: 6px 14px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.7);
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.15s;
+  }
+  .topnav-tab:hover { background: rgba(255,255,255,0.1); color: white; }
+  .topnav-tab.active { background: var(--epic-teal-600); color: white; }
+  .topnav-right { display: flex; align-items: center; gap: 16px; font-size: 12px; }
+  .user-pill {
+    display: flex; align-items: center; gap: 8px;
+    padding: 4px 10px; background: var(--epic-teal-800); border-radius: 12px;
+  }
+  .user-avatar {
+    width: 22px; height: 22px; background: var(--epic-teal-500); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 600; font-size: 10px;
+  }
+
+  /* ============ PATIENT BANNER ============ */
+  .patient-banner {
+    background: linear-gradient(180deg, white 0%, var(--gray-50) 100%);
+    border-bottom: 2px solid var(--epic-teal-700);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    box-shadow: var(--shadow-sm);
+  }
+  .patient-avatar {
+    width: 64px; height: 64px;
+    background: linear-gradient(135deg, var(--epic-teal-600), var(--epic-teal-800));
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display);
+    font-size: 24px; font-weight: 700;
+    box-shadow: var(--shadow-md);
+    flex-shrink: 0;
+  }
+  .patient-identity { flex-shrink: 0; min-width: 240px; }
+  .patient-name {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--gray-900);
+    line-height: 1.2;
+    letter-spacing: -0.3px;
+  }
+  .patient-meta {
+    margin-top: 4px;
+    color: var(--gray-600);
+    font-size: 12px;
+    display: flex; gap: 12px; align-items: center;
+  }
+  .patient-meta .pronouns {
+    background: var(--gray-200); color: var(--gray-700);
+    padding: 1px 6px; border-radius: 3px; font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;
+  }
+  .patient-fields { display: flex; gap: 32px; flex: 1; align-items: center; }
+  .patient-field {
+    display: flex; flex-direction: column; gap: 2px;
+    border-left: 1px solid var(--gray-300);
+    padding-left: 16px;
+  }
+  .patient-field .label {
+    font-size: 10px; text-transform: uppercase;
+    color: var(--gray-500); letter-spacing: 0.7px; font-weight: 600;
+  }
+  .patient-field .value {
+    font-size: 13px; color: var(--gray-900); font-weight: 500;
+    font-feature-settings: "tnum";
+  }
+  .patient-field .value.mono { font-family: var(--font-mono); font-size: 12px; }
+
+  .verified-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: var(--accent-success-bg); color: var(--accent-success);
+    padding: 3px 8px; border-radius: 10px;
+    font-size: 11px; font-weight: 600;
+  }
+  .verified-badge::before {
+    content: "✓"; font-weight: 800;
+  }
+
+  .alerts-strip {
+    background: linear-gradient(90deg, #fff8e1 0%, #fffaf0 100%);
+    border-bottom: 1px solid #f0c14b;
+    padding: 8px 24px;
+    display: flex; align-items: center; gap: 12px;
+    font-size: 12px;
+    color: #8b5a1f;
+  }
+  .alerts-strip .icon {
+    width: 18px; height: 18px;
+    background: #f59e0b; color: white;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 11px; flex-shrink: 0;
+  }
+  .alerts-strip strong { color: #6b3a0c; }
+
+  /* ============ TAB NAV ============ */
+  .tabnav {
+    background: white;
+    border-bottom: 1px solid var(--gray-300);
+    padding: 0 24px;
+    display: flex;
+    gap: 2px;
+    overflow-x: auto;
+  }
+  .tab {
+    padding: 12px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gray-600);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.15s;
+    white-space: nowrap;
+    position: relative;
+  }
+  .tab:hover { color: var(--epic-teal-700); background: var(--gray-50); }
+  .tab.active {
+    color: var(--epic-teal-700);
+    border-bottom-color: var(--epic-teal-600);
+    font-weight: 600;
+  }
+  .tab .badge {
+    background: var(--accent-danger);
+    color: white;
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 10px;
+    margin-left: 6px;
+    font-weight: 700;
+  }
+
+  /* ============ MAIN CONTENT ============ */
+  .main {
+    display: grid;
+    grid-template-columns: 240px 1fr 320px;
+    gap: 16px;
+    padding: 16px 24px;
+    max-width: 1920px;
+    margin: 0 auto;
+  }
+
+  /* ============ LEFT NAV ============ */
+  .leftnav {
+    background: white;
+    border-radius: 6px;
+    border: 1px solid var(--gray-300);
+    padding: 8px 0;
+    height: fit-content;
+    box-shadow: var(--shadow-sm);
+  }
+  .leftnav-section { padding: 6px 0; }
+  .leftnav-header {
+    padding: 8px 16px 4px;
+    font-size: 10px;
+    text-transform: uppercase;
+    color: var(--gray-500);
+    letter-spacing: 0.7px;
+    font-weight: 700;
+  }
+  .leftnav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all 0.1s;
+    font-size: 13px;
+    color: var(--gray-700);
+    border-left: 3px solid transparent;
+  }
+  .leftnav-item:hover {
+    background: var(--gray-100);
+    color: var(--gray-900);
+  }
+  .leftnav-item.active {
+    background: var(--epic-teal-50);
+    color: var(--epic-teal-800);
+    border-left-color: var(--epic-teal-600);
+    font-weight: 600;
+  }
+  .leftnav-item .ico {
+    width: 16px; height: 16px;
+    display: inline-flex; align-items: center; justify-content: center;
+    color: var(--gray-500);
+    font-size: 14px;
+  }
+  .leftnav-item.active .ico { color: var(--epic-teal-600); }
+  .leftnav-divider {
+    height: 1px; background: var(--gray-200); margin: 4px 12px;
+  }
+
+  /* ============ CENTER PANEL ============ */
+  .center {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .panel {
+    background: white;
+    border-radius: 6px;
+    border: 1px solid var(--gray-300);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+  }
+  .panel-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--gray-200);
+    display: flex; justify-content: space-between; align-items: center;
+    background: linear-gradient(180deg, white 0%, var(--gray-50) 100%);
+  }
+  .panel-title {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gray-900);
+    letter-spacing: -0.2px;
+  }
+  .panel-actions { display: flex; gap: 6px; }
+  .panel-link {
+    font-size: 12px; color: var(--epic-teal-600);
+    cursor: pointer; padding: 4px 8px; border-radius: 3px;
+    transition: all 0.15s; font-weight: 500;
+  }
+  .panel-link:hover { background: var(--epic-teal-50); }
+  .panel-body { padding: 14px 16px; }
+
+  /* ============ CARE GAPS PANEL ============ */
+  .care-gap {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 12px;
+    border: 1px solid var(--gray-200);
+    border-radius: 5px;
+    margin-bottom: 8px;
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+  .care-gap:last-child { margin-bottom: 0; }
+  .care-gap:hover {
+    border-color: var(--epic-teal-500);
+    background: var(--epic-teal-50);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+  .care-gap-status {
+    width: 8px; height: 8px; border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .care-gap-status.overdue { background: var(--accent-danger); box-shadow: 0 0 0 3px rgba(197,48,48,0.15); }
+  .care-gap-status.due-soon { background: var(--accent-warning); }
+  .care-gap-status.scheduled { background: var(--accent-info); }
+  .care-gap-status.complete { background: var(--accent-success); }
+  .care-gap-content { flex: 1; }
+  .care-gap-name { font-weight: 600; color: var(--gray-900); font-size: 13px; }
+  .care-gap-detail { font-size: 11px; color: var(--gray-600); margin-top: 2px; }
+  .care-gap-action {
+    font-size: 11px; padding: 4px 10px;
+    background: var(--epic-teal-600); color: white;
+    border-radius: 3px; font-weight: 600;
+    border: none; cursor: pointer;
+    transition: background 0.15s;
+  }
+  .care-gap-action:hover { background: var(--epic-teal-700); }
+  .care-gap-action.scheduled {
+    background: var(--accent-info-bg); color: var(--accent-info);
+  }
+
+  /* ============ APPOINTMENTS / TIMELINE ============ */
+  .timeline-item {
+    display: flex; gap: 14px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--gray-100);
+  }
+  .timeline-item:last-child { border-bottom: none; }
+  .timeline-date {
+    flex-shrink: 0;
+    width: 60px;
+    text-align: center;
+    padding: 6px 0;
+    background: var(--gray-100);
+    border-radius: 4px;
+  }
+  .timeline-date .month {
+    font-size: 9px; text-transform: uppercase;
+    color: var(--gray-600); font-weight: 700; letter-spacing: 0.5px;
+  }
+  .timeline-date .day {
+    font-family: var(--font-display);
+    font-size: 18px; font-weight: 700;
+    color: var(--gray-900); line-height: 1;
+  }
+  .timeline-date .year {
+    font-size: 9px; color: var(--gray-500);
+  }
+  .timeline-date.upcoming {
+    background: var(--epic-teal-100);
+  }
+  .timeline-date.upcoming .month { color: var(--epic-teal-700); }
+  .timeline-date.upcoming .day { color: var(--epic-teal-800); }
+  .timeline-date.upcoming .year { color: var(--epic-teal-600); }
+
+  .timeline-content { flex: 1; }
+  .timeline-title { font-weight: 600; color: var(--gray-900); font-size: 13px; }
+  .timeline-meta { font-size: 11px; color: var(--gray-600); margin-top: 2px; }
+  .timeline-tags { margin-top: 6px; display: flex; gap: 4px; flex-wrap: wrap; }
+  .tag {
+    font-size: 10px; padding: 2px 7px; border-radius: 10px;
+    background: var(--gray-200); color: var(--gray-700);
+    font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px;
+  }
+  .tag.scheduled { background: var(--epic-teal-100); color: var(--epic-teal-800); }
+  .tag.completed { background: var(--accent-success-bg); color: var(--accent-success); }
+  .tag.outreach { background: #fef3c7; color: #92400e; }
+
+  /* ============ DEMOGRAPHICS GRID ============ */
+  .demo-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px 24px;
+  }
+  .demo-field {
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .demo-field .label {
+    font-size: 10px; text-transform: uppercase;
+    color: var(--gray-500); letter-spacing: 0.7px; font-weight: 600;
+  }
+  .demo-field .value {
+    font-size: 13px; color: var(--gray-900);
+  }
+  .demo-field .value.mono { font-family: var(--font-mono); font-size: 12px; }
+
+  /* ============ INSURANCE ============ */
+  .insurance-card {
+    background: linear-gradient(135deg, var(--epic-teal-700), var(--epic-teal-900));
+    color: white;
+    border-radius: 8px;
+    padding: 14px 16px;
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+  }
+  .insurance-card::before {
+    content: "";
+    position: absolute;
+    top: -20px; right: -20px;
+    width: 100px; height: 100px;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 50%;
+  }
+  .insurance-card::after {
+    content: "";
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 140px; height: 140px;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 50%;
+  }
+  .insurance-payer {
+    font-family: var(--font-display);
+    font-size: 14px; font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+  .insurance-plan {
+    font-size: 11px; opacity: 0.85;
+    margin-top: 2px;
+  }
+  .insurance-row {
+    display: flex; justify-content: space-between;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+  }
+  .insurance-field {
+    display: flex; flex-direction: column;
+  }
+  .insurance-field .label {
+    font-size: 9px; text-transform: uppercase;
+    opacity: 0.7; letter-spacing: 0.5px; font-weight: 600;
+  }
+  .insurance-field .value {
+    font-family: var(--font-mono);
+    font-size: 13px; font-weight: 600;
+    margin-top: 2px;
+  }
+
+  /* ============ RIGHT PANEL ============ */
+  .right { display: flex; flex-direction: column; gap: 16px; }
+
+  /* Outreach inbox */
+  .outreach-item {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--gray-200);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .outreach-item:hover { background: var(--gray-50); }
+  .outreach-item:last-child { border-bottom: none; }
+  .outreach-channel {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 10px; text-transform: uppercase;
+    font-weight: 700; letter-spacing: 0.5px;
+    padding: 2px 6px; border-radius: 3px;
+  }
+  .outreach-channel.sms { background: #e0f2fe; color: #075985; }
+  .outreach-channel.email { background: #f3e8ff; color: #6b21a8; }
+  .outreach-channel.voice { background: #fef3c7; color: #92400e; }
+  .outreach-snippet {
+    margin-top: 6px;
+    font-size: 12px;
+    color: var(--gray-700);
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  .outreach-meta {
+    margin-top: 4px;
+    font-size: 11px;
+    color: var(--gray-500);
+    display: flex; justify-content: space-between;
+  }
+  .response-pill {
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 8px;
+    font-weight: 600;
+  }
+  .response-pill.responded { background: var(--accent-success-bg); color: var(--accent-success); }
+  .response-pill.no-response { background: var(--gray-200); color: var(--gray-600); }
+
+  /* Notes */
+  .note {
+    padding: 10px;
+    border-left: 3px solid var(--epic-teal-500);
+    background: var(--gray-50);
+    border-radius: 0 4px 4px 0;
+    margin-bottom: 8px;
+  }
+  .note:last-child { margin-bottom: 0; }
+  .note-meta {
+    font-size: 11px; color: var(--gray-600);
+    display: flex; justify-content: space-between;
+    margin-bottom: 4px;
+  }
+  .note-author { font-weight: 600; color: var(--gray-700); }
+  .note-text { font-size: 12px; color: var(--gray-800); line-height: 1.45; }
+
+  /* ============ TAB CONTENT (hidden by default) ============ */
+  .tab-content { display: none; }
+  .tab-content.active { display: contents; }
+
+  /* ============ FOOTER ============ */
+  .footer {
+    padding: 8px 24px;
+    background: var(--gray-200);
+    border-top: 1px solid var(--gray-300);
+    color: var(--gray-600);
+    font-size: 11px;
+    display: flex; justify-content: space-between;
+  }
+  .footer .breadcrumb { font-family: var(--font-mono); }
+
+  /* Subtle entrance animation */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .panel { animation: fadeUp 0.4s ease backwards; }
+  .center .panel:nth-child(1) { animation-delay: 0.05s; }
+  .center .panel:nth-child(2) { animation-delay: 0.10s; }
+  .center .panel:nth-child(3) { animation-delay: 0.15s; }
+  .right .panel:nth-child(1) { animation-delay: 0.20s; }
+  .right .panel:nth-child(2) { animation-delay: 0.25s; }
+  .right .panel:nth-child(3) { animation-delay: 0.30s; }
+
+  /* Inbound call indicator (live demo flair) */
+  .live-call-indicator {
+    background: var(--accent-success);
+    color: white;
+    padding: 3px 10px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .live-call-indicator::before {
+    content: "";
+    width: 6px; height: 6px; background: white;
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <div class="topnav-left">
+    <div class="logo"><span class="logo-mark">C</span>Cheers <span style="opacity:0.5;font-weight:400;font-size:13px;margin-left:6px;">/ Patient Relationship Management</span></div>
+    <div class="topnav-tabs">
+      <div class="topnav-tab">My Dashboard</div>
+      <div class="topnav-tab active">Patient Lookup</div>
+      <div class="topnav-tab">Outreach Campaigns</div>
+      <div class="topnav-tab">Care Gaps</div>
+      <div class="topnav-tab">Reports</div>
+    </div>
+  </div>
+  <div class="topnav-right">
+    <span class="live-call-indicator">Inbound call · Marie Robichaux</span>
+    <div class="user-pill">
+      <div class="user-avatar">CM</div>
+      <span>Christopher M. — FMOL Patient Access</span>
+    </div>
+  </div>
+</nav>
+
+<!-- PATIENT BANNER -->
+<header class="patient-banner">
+  <div class="patient-avatar">MR</div>
+  <div class="patient-identity">
+    <div class="patient-name">Marie Robichaux</div>
+    <div class="patient-meta">
+      <span>Female, 58 years</span>
+      <span class="pronouns">She/Her</span>
+      <span class="verified-badge">Identity Verified</span>
+    </div>
+  </div>
+  <div class="patient-fields">
+    <div class="patient-field">
+      <span class="label">MRN</span>
+      <span class="value mono">FMOL-1029384</span>
+    </div>
+    <div class="patient-field">
+      <span class="label">DOB</span>
+      <span class="value">04/12/1968</span>
+    </div>
+    <div class="patient-field">
+      <span class="label">PCP</span>
+      <span class="value">Dr. Angela Thibodaux, MD</span>
+    </div>
+    <div class="patient-field">
+      <span class="label">Home Location</span>
+      <span class="value">OLOL Baton Rouge</span>
+    </div>
+    <div class="patient-field">
+      <span class="label">Last Visit</span>
+      <span class="value">Feb 18, 2024</span>
+    </div>
+  </div>
+</header>
+
+<!-- ALERTS STRIP -->
+<div class="alerts-strip">
+  <div class="icon">!</div>
+  <div>
+    <strong>1 overdue care gap:</strong> Screening Mammogram (last completed 02/2024, due since 02/2025).
+    <strong style="margin-left:12px;">Insurance change on file:</strong> Switched from Humana to BCBS Louisiana (effective 04/01/2026) — verify before scheduling.
+  </div>
+</div>
+
+<!-- TAB NAV -->
+<div class="tabnav">
+  <div class="tab active" data-tab="overview">Overview</div>
+  <div class="tab" data-tab="caregaps">Care Gaps <span class="badge">1</span></div>
+  <div class="tab" data-tab="appointments">Appointments</div>
+  <div class="tab" data-tab="outreach">Outreach History</div>
+  <div class="tab" data-tab="communications">Communications</div>
+  <div class="tab" data-tab="referrals">Referrals</div>
+  <div class="tab" data-tab="documents">Documents</div>
+  <div class="tab" data-tab="financial">Financial</div>
+</div>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- LEFT NAV -->
+  <aside class="leftnav">
+    <div class="leftnav-section">
+      <div class="leftnav-header">Patient Activity</div>
+      <div class="leftnav-item active"><span class="ico">●</span>Active Encounter</div>
+      <div class="leftnav-item"><span class="ico">▢</span>Recent Activity</div>
+      <div class="leftnav-item"><span class="ico">⏱</span>Timeline</div>
+    </div>
+    <div class="leftnav-divider"></div>
+    <div class="leftnav-section">
+      <div class="leftnav-header">Clinical</div>
+      <div class="leftnav-item"><span class="ico">⚕</span>Problem List</div>
+      <div class="leftnav-item"><span class="ico">℞</span>Medications</div>
+      <div class="leftnav-item"><span class="ico">⚠</span>Allergies</div>
+      <div class="leftnav-item"><span class="ico">🩺</span>Vitals</div>
+    </div>
+    <div class="leftnav-divider"></div>
+    <div class="leftnav-section">
+      <div class="leftnav-header">Engagement</div>
+      <div class="leftnav-item"><span class="ico">✉</span>MyChart Activity</div>
+      <div class="leftnav-item"><span class="ico">💬</span>Preferences</div>
+      <div class="leftnav-item"><span class="ico">📞</span>Call History</div>
+    </div>
+    <div class="leftnav-divider"></div>
+    <div class="leftnav-section">
+      <div class="leftnav-header">Account</div>
+      <div class="leftnav-item"><span class="ico">$</span>Balance</div>
+      <div class="leftnav-item"><span class="ico">📋</span>Coverage</div>
+      <div class="leftnav-item"><span class="ico">🔐</span>Consent on File</div>
+    </div>
+  </aside>
+
+  <!-- CENTER -->
+  <section class="center">
+
+    <!-- DEMOGRAPHICS -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Demographics & Contact</div>
+        <div class="panel-actions">
+          <span class="panel-link">Edit</span>
+          <span class="panel-link">View Full Profile →</span>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="demo-grid">
+          <div class="demo-field">
+            <span class="label">Legal Name</span>
+            <span class="value">Marie Antoinette Robichaux</span>
+          </div>
+          <div class="demo-field">
+            <span class="label">Preferred Name</span>
+            <span class="value">Marie</span>
+          </div>
+          <div class="demo-field">
+            <span class="label">Phone (Mobile)</span>
+            <span class="value mono">(225) 555-0184</span>
+          </div>
+          <div class="demo-field">
+            <span class="label">Phone (Home)</span>
+            <span class="value mono">(225) 555-7820</span>
+          </div>
+          <div class="demo-field">
+            <span class="label">Email</span>
+            <span class="value">m.robichaux@gmail.com</span>
+          </div>
+          <div class="demo-field">
+            <span class="label">Preferred Contact</span>
+            <span class="value">SMS, mornings before 11am</span>
+          </div>
+          <div class="demo-field">
+            <span class="label">Address</span>
+            <span class="value">2841 Bocage Lake Dr, Baton Rouge, LA 70809</span>
+          </div>
+          <div class="demo-field">
+            <span class="label">Preferred Language</span>
+            <span class="value">English</span>
+          </div>
+          <div class="demo-field">
+            <span class="label">Marital Status</span>
+            <span class="value">Married</span>
+          </div>
+          <div class="demo-field">
+            <span class="label">Emergency Contact</span>
+            <span class="value">David Robichaux (spouse) · (225) 555-9433</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARE GAPS -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Care Gaps & Preventive Health</div>
+        <div class="panel-actions">
+          <span class="panel-link">View All Recommendations →</span>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="care-gap">
+          <div class="care-gap-status overdue"></div>
+          <div class="care-gap-content">
+            <div class="care-gap-name">Screening Mammogram</div>
+            <div class="care-gap-detail">USPSTF Grade B · Last: 02/14/2024 at St. Francis Monroe · Due since 02/2025 (15 months overdue)</div>
+          </div>
+          <button class="care-gap-action">Schedule Now</button>
+        </div>
+        <div class="care-gap">
+          <div class="care-gap-status scheduled"></div>
+          <div class="care-gap-content">
+            <div class="care-gap-name">Annual Wellness Visit</div>
+            <div class="care-gap-detail">Scheduled with Dr. Thibodaux · 06/12/2026 at 9:00 AM · OLOL Family Medicine</div>
+          </div>
+          <button class="care-gap-action scheduled">Scheduled</button>
+        </div>
+        <div class="care-gap">
+          <div class="care-gap-status due-soon"></div>
+          <div class="care-gap-content">
+            <div class="care-gap-name">Colonoscopy Screening</div>
+            <div class="care-gap-detail">USPSTF Grade A · Last: 06/10/2018 (overdue 8+ years for 10-year cycle) · Recommend GI referral</div>
+          </div>
+          <button class="care-gap-action">Refer to GI</button>
+        </div>
+        <div class="care-gap">
+          <div class="care-gap-status complete"></div>
+          <div class="care-gap-content">
+            <div class="care-gap-name">DEXA / Bone Density</div>
+            <div class="care-gap-detail">Completed 11/03/2025 · Result: T-score -1.2 (osteopenia, monitor)</div>
+          </div>
+          <button class="care-gap-action scheduled">Up to Date</button>
+        </div>
+        <div class="care-gap">
+          <div class="care-gap-status complete"></div>
+          <div class="care-gap-content">
+            <div class="care-gap-name">Influenza Vaccine 2025-2026</div>
+            <div class="care-gap-detail">Administered 10/15/2025 · OLOL Family Medicine</div>
+          </div>
+          <button class="care-gap-action scheduled">Complete</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- APPOINTMENTS / TIMELINE -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Appointments & Encounters</div>
+        <div class="panel-actions">
+          <span class="panel-link">+ New Appointment</span>
+          <span class="panel-link">View Full History →</span>
+        </div>
+      </div>
+      <div class="panel-body">
+
+        <div class="timeline-item">
+          <div class="timeline-date upcoming">
+            <div class="month">May</div>
+            <div class="day">20</div>
+            <div class="year">2026</div>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-title">Screening Mammogram (NEW — being scheduled)</div>
+            <div class="timeline-meta">8:30 AM · OLOL Imaging — Baton Rouge · Reading Rad: Dr. Marcus Hebert</div>
+            <div class="timeline-tags">
+              <span class="tag scheduled">In Progress</span>
+              <span class="tag outreach">Care Gap Closure</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date upcoming">
+            <div class="month">Jun</div>
+            <div class="day">12</div>
+            <div class="year">2026</div>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-title">Annual Wellness Visit</div>
+            <div class="timeline-meta">9:00 AM · OLOL Family Medicine · Dr. Angela Thibodaux</div>
+            <div class="timeline-tags">
+              <span class="tag scheduled">Scheduled</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">
+            <div class="month">Feb</div>
+            <div class="day">18</div>
+            <div class="year">2024</div>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-title">Office Visit — Annual Physical</div>
+            <div class="timeline-meta">St. Francis Monroe · Dr. Linda Cheramie · BP 128/82, BMI 26.4</div>
+            <div class="timeline-tags">
+              <span class="tag completed">Completed</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">
+            <div class="month">Feb</div>
+            <div class="day">14</div>
+            <div class="year">2024</div>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-title">Screening Mammogram (Baseline)</div>
+            <div class="timeline-meta">St. Francis Monroe Imaging · BI-RADS 1 (negative) · CD copy on file</div>
+            <div class="timeline-tags">
+              <span class="tag completed">Completed</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">
+            <div class="month">Nov</div>
+            <div class="day">03</div>
+            <div class="year">2025</div>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-title">DEXA Bone Density Scan</div>
+            <div class="timeline-meta">OLOL Imaging — Baton Rouge · T-score -1.2 (osteopenia)</div>
+            <div class="timeline-tags">
+              <span class="tag completed">Completed</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+  <!-- RIGHT -->
+  <aside class="right">
+
+    <!-- INSURANCE CARD -->
+    <div class="panel" style="background: transparent; border: none; box-shadow: none;">
+      <div class="insurance-card">
+        <div class="insurance-payer">Blue Cross Blue Shield Louisiana</div>
+        <div class="insurance-plan">PPO · Group Health Plan · Effective 04/01/2026</div>
+        <div class="insurance-row">
+          <div class="insurance-field">
+            <span class="label">Member ID</span>
+            <span class="value">XYL-883-449201</span>
+          </div>
+          <div class="insurance-field">
+            <span class="label">Group</span>
+            <span class="value">748290</span>
+          </div>
+        </div>
+        <div class="insurance-row">
+          <div class="insurance-field">
+            <span class="label">Copay (Specialist)</span>
+            <span class="value">$45</span>
+          </div>
+          <div class="insurance-field">
+            <span class="label">Deductible Met</span>
+            <span class="value">$340 / $2,500</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OUTREACH HISTORY -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Recent Outreach</div>
+        <div class="panel-actions">
+          <span class="panel-link">All →</span>
+        </div>
+      </div>
+      <div class="outreach-item">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span class="outreach-channel sms">SMS</span>
+          <span class="response-pill responded">Responded</span>
+        </div>
+        <div class="outreach-snippet">"Hi Marie, your screening mammogram is overdue. Reply YES to schedule or call (225) 555-FMOL."</div>
+        <div class="outreach-meta">
+          <span>Mammogram Outreach Campaign</span>
+          <span>2 days ago</span>
+        </div>
+      </div>
+      <div class="outreach-item">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span class="outreach-channel email">EMAIL</span>
+          <span class="response-pill no-response">Opened, no reply</span>
+        </div>
+        <div class="outreach-snippet">"Annual wellness reminder — your AWV is due. Schedule online or call your care team."</div>
+        <div class="outreach-meta">
+          <span>AWV Reminder Q2</span>
+          <span>9 days ago</span>
+        </div>
+      </div>
+      <div class="outreach-item">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span class="outreach-channel voice">VOICE</span>
+          <span class="response-pill no-response">No answer</span>
+        </div>
+        <div class="outreach-snippet">"Automated outreach call — care gap reminder for screening mammogram. Voicemail left."</div>
+        <div class="outreach-meta">
+          <span>Care Gap Outreach</span>
+          <span>14 days ago</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- AGENT NOTES -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Recent Notes</div>
+        <div class="panel-actions">
+          <span class="panel-link">+ Add Note</span>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="note">
+          <div class="note-meta">
+            <span class="note-author">M. Daigle (Population Health)</span>
+            <span>03/14/2026</span>
+          </div>
+          <div class="note-text">Patient flagged for proactive mammogram outreach. Spouse recently changed jobs — verify insurance before scheduling. Anxiety noted re: family hx (maternal aunt, breast ca).</div>
+        </div>
+        <div class="note">
+          <div class="note-meta">
+            <span class="note-author">Dr. Thibodaux</span>
+            <span>02/18/2024</span>
+          </div>
+          <div class="note-text">Annual physical w/n limits. Encouraged regular screening mammogram given family history. Patient reports anxiety, will follow up.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PATIENT PREFERENCES -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Patient Preferences</div>
+      </div>
+      <div class="panel-body">
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:12px;">
+          <div style="display:flex;justify-content:space-between;">
+            <span style="color:var(--gray-600);">Appointment time</span>
+            <span style="font-weight:500;">Mornings before 11am</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;">
+            <span style="color:var(--gray-600);">Reminder cadence</span>
+            <span style="font-weight:500;">7d, 2d, day-of</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;">
+            <span style="color:var(--gray-600);">Reminder channel</span>
+            <span style="font-weight:500;">SMS only</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;">
+            <span style="color:var(--gray-600);">Interpreter needed</span>
+            <span style="font-weight:500;">No</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;">
+            <span style="color:var(--gray-600);">Transport assistance</span>
+            <span style="font-weight:500;">No</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;">
+            <span style="color:var(--gray-600);">MyChart enrolled</span>
+            <span style="font-weight:500;color:var(--accent-success);">Yes (since 2022)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="breadcrumb">Cheers / Patient / Robichaux, Marie / FMOL-1029384 / Active Encounter</div>
+  <div>Cheers v9.4 · Tenant: FMOL-PROD · User: cmoreau@fmolhs.org · Session: 4h 17m</div>
+</footer>
+
+<script>
+  // Tab switching - lightly interactive
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      // Visual feedback only - in a real demo this would swap content panels
+    });
+  });
+
+  // Top nav tab clicks
+  document.querySelectorAll('.topnav-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.topnav-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+    });
+  });
+
+  // Care gap action buttons - subtle feedback
+  document.querySelectorAll('.care-gap-action').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      // Visual confirmation only
+      const original = btn.textContent;
+      if (original === 'Schedule Now' || original === 'Refer to GI') {
+        btn.textContent = '✓ Initiated';
+        btn.style.background = 'var(--accent-success)';
+        setTimeout(() => {
+          btn.textContent = original;
+          btn.style.background = '';
+        }, 2000);
+      }
+    });
+  });
+
+  // Left nav clicks
+  document.querySelectorAll('.leftnav-item').forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.leftnav-item').forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>
